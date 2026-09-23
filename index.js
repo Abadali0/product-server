@@ -4,7 +4,7 @@ const app = express();
 let products = [
   {
     id: 1,
-    name: "Corsair HS45 Headphone",
+    name: "Corsair HS45 Earbuds",
     price: 4500,
     imageUrl: "https://techmatched.pk/wp-content/uploads/2024/05/4-13.png",
     desc: "A comfortable and high-quality gaming.",
