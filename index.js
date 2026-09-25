@@ -1,5 +1,19 @@
 import express from "express";
-import cors from "cors"
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import cors from "cors";
+import Product from "./model/Product.js";
+
+dotenv.config();
+//const app =express();
+
+import dns from "node:dns/promises";
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
+
+
+
+
+
 const app = express();
  app.use(express.json());
  app.use(cors({
@@ -7,6 +21,17 @@ const app = express();
   methods:["GET","POST","PUT","DELETE"]
  }),
 );
+
+async function ConnectDB() {
+  try{
+    await mongoose.connect(process.env.MONGOOB_URI);
+    console.log("MongoDB connected");
+  }  catch(error){
+    console.error("MongoDB connection Error:",error);
+  }
+}
+ConnectDB();
+
 let products = [
   {
     id: 1,
