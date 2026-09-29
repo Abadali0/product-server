@@ -50,15 +50,30 @@ let products = [
   },
 ];
 
-app.get("/products", (req, res)=>{
+app.get("/products",async (req, res)=>{
+  try{
+    const products=await Product.find();
     res.json(products);
+  }catch(error){
+    res.status(500).json({message: "Error fetching products"});
+  }
+    
 
 });
 
-app.post("/products", (req, res) => {
-  const newProduct = req.body;
-  products.push(newProduct);
+app.post("/products", async (req, res) => {
+  try{
+      
+  const newProductFeild = req.body;
+    const newProduct= new Product(newProductFeild);
+    await newProduct.save();
   res.status(201).json(newProduct);
+} catch(error){
+  res.status(500).json({message: "Error creating products", error:error});
+}
+  
+
+
 });
 
 
@@ -75,10 +90,15 @@ app.put("/products/:id",(req,res)=>{
 });
 
 
-app.delete("/products/:id", (req, res) => {
-  const { id } = req.params;
-  products = products.filter((product) => product.id !== parseInt(id));
-  res.status(204).send();
+app.delete("/products/:id", async(req, res) => {
+  try{
+    const { id } = req.params;
+    await Product.findOneAndDelete({id:id});
+    res.status(204).send();
+  } catch(error){
+    res.status(500).json({message:"Error Deleting Product"});
+  }
+  
 });
 
 app.listen(5050, ()=>{
