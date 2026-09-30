@@ -77,15 +77,18 @@ app.post("/products", async (req, res) => {
 });
 
 
-app.put("/products/:id",(req,res)=>{
-        const{id}=req.params;
-        const updatedProduct=req.body;
-        const index = products.findIndex((product)=>product.id===parseInt(id));
-        if(index !== -1){
-                products[index]={... products[index], ... updatedProduct};
-                res.json(products[index]);
-        } else{
-                res.status(404).json({message:"Product not found"});
+app.put("/products/:id",async(req,res)=>{
+        try{
+          const {id}=req.params;
+          const updateProductFields =req.body;
+          const updateProduct =await Product.findOneAndUpdate(
+            {id},
+            updateProductFields,
+            {new:true},
+          );
+          res.json(updateProduct);
+        }catch(error){
+          res.status(500).json({message:"Erroe updating Product"});
         }
 });
 
